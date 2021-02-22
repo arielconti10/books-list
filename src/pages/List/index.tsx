@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/Feather";
 
 import SearchBar from "../../components/searchBar";
 import { Container, Header } from "./styles";
-import List from "./list";
+import BookList from "./list";
 
 interface Book {
   id: string;

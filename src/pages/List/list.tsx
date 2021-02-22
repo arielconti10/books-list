@@ -9,7 +9,7 @@ interface Props {
   search: string;
 }
 
-const List: React.FC<Props> = ({ children, search }) => {
+const BookList: React.FC<Props> = ({ children, search }) => {
   const navigation = useNavigation();
   const [data, setData] = useState([]);
   const [searchString, setSearchString] = useState("");
@@ -115,4 +115,4 @@ const List: React.FC<Props> = ({ children, search }) => {
   );
 };
 
-export default List;
+export default BookList;
