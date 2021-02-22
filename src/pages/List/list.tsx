@@ -7,37 +7,19 @@ import genericImage from "../../assets/genericCover.gif";
 
 interface Props {
   search: string;
+  loading: boolean;
+  data: [];
+  handleLoadMore: () => void;
 }
 
-const BookList: React.FC<Props> = ({ children, search }) => {
+const BookList: React.FC<Props> = ({
+  children,
+  search,
+  data,
+  loading,
+  handleLoadMore,
+}) => {
   const navigation = useNavigation();
-  const [data, setData] = useState([]);
-
-  const [loading, setLoading] = useState(false);
-  const [pageCurrent, setpageCurrent] = useState(1);
-
-  useEffect(() => {
-    setLoading(true);
-    getData(search);
-    return () => {};
-  }, [pageCurrent, search]);
-
-  const getData = async (searchString: string) => {
-    if (!searchString) {
-      searchString = "Design";
-    }
-    const apiURL =
-      "https://www.googleapis.com/books/v1/volumes?q=" +
-      searchString +
-      "&maxResults=12&startIndex=" +
-      pageCurrent;
-
-    fetch(apiURL)
-      .then((res) => res.json())
-      .then((resJson) => {
-        setData(data.concat(resJson.items));
-      });
-  };
 
   const renderItem = ({ item }: any) => {
     if (item) {
@@ -85,13 +67,6 @@ const BookList: React.FC<Props> = ({ children, search }) => {
         <ActivityIndicator />
       </View>
     ) : null;
-  };
-
-  const handleLoadMore = () => {
-    setTimeout(() => {
-      setpageCurrent(pageCurrent + 12);
-      setLoading(true);
-    }, 500);
   };
 
   return (

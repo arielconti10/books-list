@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Alert,
   NativeSyntheticEvent,
@@ -8,34 +8,30 @@ import {
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Container } from "./styles";
-import axios from "axios";
 
 const Home: React.FC = () => {
   const navigation = useNavigation();
 
   const [search, setSearchString] = useState<string>("");
-  const [books, setBooks] = useState();
 
-  const handleChangeSearch = (
-    e: NativeSyntheticEvent<TextInputChangeEventData>
-  ): void => {
-    const value = e.nativeEvent.text;
+  const handleChangeSearch = useCallback(
+    (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
+      const value = e.nativeEvent.text;
 
-    setSearchString(value);
-  };
+      setSearchString(value);
+    },
+    []
+  );
 
-  const handleSearch = () => {
-    try {
-      if (search === "") {
-        Alert.alert("Digite um tema para pesquisar");
-        return;
-      }
-
-      navigation.navigate("List", { search });
-    } catch (err) {
-      console.log(err);
+  const handleSearch = useCallback(() => {
+    console.log(search);
+    if (search === "") {
+      Alert.alert("Digite um tema para pesquisar");
+      return;
     }
-  };
+
+    navigation.navigate("List", { search });
+  }, [search]);
 
   return (
     <Container>

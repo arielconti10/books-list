@@ -9,14 +9,50 @@ import { Container, Header } from "./styles";
 import BookList from "./list";
 
 const List: React.FC = ({ route }) => {
-  const [searchString, setSearchString] = useState<string>("");
-
   const search = route.params ? route.params.search : undefined;
 
+  const [searchString, setSearchString] = useState<string>("");
+
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [pageCurrent, setpageCurrent] = useState(1);
+
   useEffect(() => {
-    setSearchString(search);
+    if (searchString === "") {
+      setSearchString(search);
+    }
     return () => {};
   }, []);
+
+  useEffect(() => {
+    if (searchString) {
+      setLoading(true);
+      getData(searchString);
+    }
+    return () => {};
+  }, [pageCurrent, searchString]);
+
+  const getData = async (query: string) => {
+    console.log(query);
+    const apiURL =
+      "https://www.googleapis.com/books/v1/volumes?q=" +
+      query +
+      "&maxResults=12&startIndex=" +
+      pageCurrent;
+
+    fetch(apiURL)
+      .then((res) => res.json())
+      .then((resJson) => {
+        setData(data.concat(resJson.items));
+      });
+  };
+
+  const handleLoadMore = () => {
+    setTimeout(() => {
+      setpageCurrent(pageCurrent + 12);
+      setLoading(true);
+    }, 500);
+  };
 
   const handleChangeSearch = (
     e: NativeSyntheticEvent<TextInputChangeEventData>
@@ -30,12 +66,23 @@ const List: React.FC = ({ route }) => {
       <Header>
         <Icon name="menu" size={20} color="#000" />
         <SearchBar onChange={handleChangeSearch} />
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => {
+            setData([]);
+            setpageCurrent(0);
+            getData(searchString);
+          }}
+        >
           <Icon name="search" size={20} color="#000" />
         </TouchableOpacity>
       </Header>
 
-      <BookList search={searchString} />
+      <BookList
+        search={searchString}
+        data={data}
+        loading={loading}
+        handleLoadMore={handleLoadMore}
+      />
     </Container>
   );
 };
