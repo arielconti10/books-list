@@ -8,22 +8,8 @@ import SearchBar from "../../components/searchBar";
 import { Container, Header } from "./styles";
 import BookList from "./list";
 
-interface Book {
-  id: string;
-  volumeInfo: {
-    title: string;
-    authors: [];
-    imageLinks: {
-      smallThumbnail: string;
-      thumbnail: string;
-    };
-  };
-}
-
 const List: React.FC = ({ route }) => {
-  const [bookList, setBookList] = useState<Book[]>([]);
   const [searchString, setSearchString] = useState<string>("");
-  const [startIndex, setStartIndex] = useState<number>(0);
 
   const search = route.params ? route.params.search : undefined;
 
@@ -49,7 +35,7 @@ const List: React.FC = ({ route }) => {
         </TouchableOpacity>
       </Header>
 
-      <List search={searchString} />
+      <BookList search={searchString} />
     </Container>
   );
 };
