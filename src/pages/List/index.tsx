@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Image,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-  ListRenderItem,
-  ActivityIndicator,
-  View,
-} from "react-native";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import axios from "axios";
 import Icon from "react-native-vector-icons/Feather";
 
 import SearchBar from "../../components/searchBar";
-import genericImage from "../../assets/genericCover.gif";
 import { Container, Header } from "./styles";
-import NewList from "./newlist";
+import List from "./list";
 
 interface Book {
   id: string;
@@ -59,7 +49,7 @@ const List: React.FC = ({ route }) => {
         </TouchableOpacity>
       </Header>
 
-      <NewList search={searchString} />
+      <List search={searchString} />
     </Container>
   );
 };
