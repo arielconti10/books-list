@@ -12,24 +12,24 @@ interface Props {
 const BookList: React.FC<Props> = ({ children, search }) => {
   const navigation = useNavigation();
   const [data, setData] = useState([]);
-  const [searchString, setSearchString] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [pageCurrent, setpageCurrent] = useState(1);
 
   useEffect(() => {
     setLoading(true);
-    setSearchString(search);
-    getData();
+    getData(search);
     return () => {};
-  }, [pageCurrent]);
+  }, [pageCurrent, search]);
 
-  const getData = async () => {
-    if (searchString === "") {
-      setSearchString("Design");
+  const getData = async (searchString: string) => {
+    if (!searchString) {
+      searchString = "Design";
     }
     const apiURL =
-      "https://www.googleapis.com/books/v1/volumes?q=Harry+Potter&maxResults=12&startIndex=" +
+      "https://www.googleapis.com/books/v1/volumes?q=" +
+      searchString +
+      "&maxResults=12&startIndex=" +
       pageCurrent;
 
     fetch(apiURL)

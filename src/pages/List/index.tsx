@@ -14,7 +14,7 @@ const List: React.FC = ({ route }) => {
   const search = route.params ? route.params.search : undefined;
 
   useEffect(() => {
-    // searchBooks(search);
+    setSearchString(search);
     return () => {};
   }, []);
 
