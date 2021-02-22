@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -11,32 +11,21 @@ import BookList from "./list";
 const List: React.FC = ({ route }) => {
   const search = route.params ? route.params.search : undefined;
 
-  const [searchString, setSearchString] = useState<string>("");
-
+  const [searchString, setSearchString] = useState<string>(search);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [pageCurrent, setpageCurrent] = useState(1);
+  const [pageCurrent, setPageCurrent] = useState(1);
 
   useEffect(() => {
-    if (searchString === "") {
-      setSearchString(search);
-    }
+    setLoading(true);
+    getData();
     return () => {};
-  }, []);
+  }, [pageCurrent]);
 
-  useEffect(() => {
-    if (searchString) {
-      setLoading(true);
-      getData(searchString);
-    }
-    return () => {};
-  }, [pageCurrent, searchString]);
-
-  const getData = async (query: string) => {
-    console.log(query);
+  const getData = useCallback(() => {
     const apiURL =
       "https://www.googleapis.com/books/v1/volumes?q=" +
-      query +
+      searchString +
       "&maxResults=12&startIndex=" +
       pageCurrent;
 
@@ -45,11 +34,12 @@ const List: React.FC = ({ route }) => {
       .then((resJson) => {
         setData(data.concat(resJson.items));
       });
-  };
+    return () => {};
+  }, [searchString]);
 
   const handleLoadMore = () => {
     setTimeout(() => {
-      setpageCurrent(pageCurrent + 12);
+      setPageCurrent(pageCurrent + 12);
       setLoading(true);
     }, 500);
   };
@@ -61,18 +51,18 @@ const List: React.FC = ({ route }) => {
     setSearchString(value);
   };
 
+  const handleSearch = () => {
+    setData([]);
+    setPageCurrent(1);
+    // getData();
+  };
+
   return (
     <Container>
       <Header>
         <Icon name="menu" size={20} color="#000" />
         <SearchBar onChange={handleChangeSearch} />
-        <TouchableOpacity
-          onPress={() => {
-            setData([]);
-            setpageCurrent(0);
-            getData(searchString);
-          }}
-        >
+        <TouchableOpacity onPress={handleSearch}>
           <Icon name="search" size={20} color="#000" />
         </TouchableOpacity>
       </Header>

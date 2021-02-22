@@ -24,7 +24,6 @@ const Home: React.FC = () => {
   );
 
   const handleSearch = useCallback(() => {
-    console.log(search);
     if (search === "") {
       Alert.alert("Digite um tema para pesquisar");
       return;
