@@ -4,10 +4,11 @@ This project is a simple app built with React Native to search and display books
 
 # Screenshots
 
+<p float="left">
 <img src="https://raw.githubusercontent.com/arielconti10/books-list/master/screenshots/screen1.png" width="250" />
 <img src="https://raw.githubusercontent.com/arielconti10/books-list/master/screenshots/screen2.png" width="250" />
 <img src="https://raw.githubusercontent.com/arielconti10/books-list/master/screenshots/screen3.png" width="250" />
-
+</p>
 # Main Features
 
 ### Home
