@@ -14,7 +14,6 @@ interface Props {
 
 const BookList: React.FC<Props> = ({
   children,
-  search,
   data,
   loading,
   handleLoadMore,
@@ -61,7 +60,7 @@ const BookList: React.FC<Props> = ({
     }
   };
 
-  const renderFooter = () => {
+  const RenderLoading = () => {
     return loading ? (
       <View style={{ alignItems: "center", marginTop: 30 }}>
         <ActivityIndicator />
@@ -82,7 +81,7 @@ const BookList: React.FC<Props> = ({
         data={data}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
-        ListFooterComponent={renderFooter}
+        ListFooterComponent={RenderLoading}
         onEndReachedThreshold={0}
         onEndReached={handleLoadMore}
       />

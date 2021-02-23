@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import {
+  ActivityIndicator,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+  View,
+} from "react-native";
 
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/Feather";
@@ -14,33 +19,34 @@ const List: React.FC = ({ route }) => {
   const [searchString, setSearchString] = useState<string>(search);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [pageCurrent, setPageCurrent] = useState(1);
+  const [pageCurrent, setPageCurrent] = useState(0);
 
   useEffect(() => {
-    setLoading(true);
     getData();
     return () => {};
   }, [pageCurrent]);
 
-  const getData = useCallback(() => {
+  const getData = async () => {
+    const query = searchString ? searchString : "Harry Potter";
+    console.log(query);
+
     const apiURL =
       "https://www.googleapis.com/books/v1/volumes?q=" +
-      searchString +
+      query +
       "&maxResults=12&startIndex=" +
       pageCurrent;
 
-    fetch(apiURL)
-      .then((res) => res.json())
-      .then((resJson) => {
-        setData(data.concat(resJson.items));
-      });
-    return () => {};
-  }, [searchString]);
+    const res = await fetch(apiURL);
+    const jsonData = await res.json();
+
+    setData(data.concat(jsonData.items));
+    setLoading(false);
+  };
 
   const handleLoadMore = () => {
+    setLoading(true);
     setTimeout(() => {
       setPageCurrent(pageCurrent + 12);
-      setLoading(true);
     }, 500);
   };
 
@@ -52,9 +58,11 @@ const List: React.FC = ({ route }) => {
   };
 
   const handleSearch = () => {
-    setData([]);
-    setPageCurrent(1);
-    // getData();
+    if (pageCurrent > 0) {
+      setPageCurrent(0);
+    }
+    setData(data.splice(0, data.length));
+    getData();
   };
 
   return (
