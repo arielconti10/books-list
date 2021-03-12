@@ -14,3 +14,13 @@ export const Header = styled.View`
   justify-content: space-between;
   align-items: center;
 `;
+
+export const LoadingView = styled.View`
+  align-items: center;
+  margin-top: 30px;
+`
+export const List = styled.FlatList`
+  flex: 1;
+  margin-top: 20px;
+  padding: 0 15px;
+`

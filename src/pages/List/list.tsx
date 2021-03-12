@@ -1,20 +1,22 @@
-import React, { useEffect, useState, createRef } from "react";
-import { ActivityIndicator, Image, View } from "react-native";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from 'react';
+import { ActivityIndicator, Image, View } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
-import genericImage from "../../assets/genericCover.gif";
+import genericImage from '../../assets/genericCover.gif';
+import { Book } from '.';
+import { List, LoadingView } from './styles';
 
 interface Props {
   search: string;
   loading: boolean;
-  data: [];
+  books: Book[];
   handleLoadMore: () => void;
 }
 
+
 const BookList: React.FC<Props> = ({
-  children,
-  data,
+  books,
   loading,
   handleLoadMore,
 }) => {
@@ -29,12 +31,12 @@ const BookList: React.FC<Props> = ({
             height: 160,
             flex: 1,
             marginBottom: 20,
-            flexWrap: "nowrap",
+            flexWrap: 'nowrap',
           }}
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("Details", { data: item });
+              navigation.navigate('Details', { data: item });
             }}
           >
             {item.volumeInfo.imageLinks ? (
@@ -43,7 +45,7 @@ const BookList: React.FC<Props> = ({
                 style={{
                   width: 110,
                   height: 160,
-                  resizeMode: "cover",
+                  resizeMode: 'cover',
                 }}
               />
             ) : (
@@ -62,27 +64,21 @@ const BookList: React.FC<Props> = ({
 
   const RenderLoading = () => {
     return loading ? (
-      <View style={{ alignItems: "center", marginTop: 30 }}>
-        <ActivityIndicator />
-      </View>
+      <LoadingView>
+        <ActivityIndicator size='large'/>
+      </LoadingView>
     ) : null;
   };
 
   return (
     <>
-      <FlatList
-        style={{
-          flex: 1,
-          marginTop: 20,
-          paddingHorizontal: 15,
-          paddingBottom: 50,
-        }}
+      <List
         numColumns={3}
-        data={data}
+        data={books}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         ListFooterComponent={RenderLoading}
-        onEndReachedThreshold={0}
+        onEndReachedThreshold={0.1}
         onEndReached={handleLoadMore}
       />
     </>

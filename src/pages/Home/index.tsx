@@ -1,18 +1,18 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from 'react';
 import {
   Alert,
   NativeSyntheticEvent,
   Text,
   TextInputChangeEventData,
-} from "react-native";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
-import { Container } from "./styles";
+} from 'react-native';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import { Container, SearchButton, SearchButtonText, SearchInput, WelcomeText } from './styles';
 
 const Home: React.FC = () => {
   const navigation = useNavigation();
 
-  const [search, setSearchString] = useState<string>("");
+  const [search, setSearchString] = useState<string>('');
 
   const handleChangeSearch = useCallback(
     (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
@@ -20,41 +20,35 @@ const Home: React.FC = () => {
 
       setSearchString(value);
     },
-    []
+    [],
   );
 
   const handleSearch = useCallback(() => {
-    if (search === "") {
-      Alert.alert("Digite um tema para pesquisar");
+    if (search === '') {
+      Alert.alert('Digite um tema para pesquisar');
       return;
     }
-
-    navigation.navigate("List", { search });
+    navigation.navigate('List', { search });
   }, [search]);
 
   return (
     <Container>
-      <Text style={{ fontSize: 22, alignSelf: "center" }}>Seja bem-vindo!</Text>
+      <WelcomeText>Seja bem-vindo!</WelcomeText>
 
-      <TextInput
+      <SearchInput
         placeholder="Pesquise um tema de livros aqui!"
-        style={{
-          padding: 20,
-          marginBottom: 20,
-          flex: 1,
-        }}
         onChange={handleChangeSearch}
       />
 
-      <TouchableOpacity style={{ marginVertical: 20 }} onPress={handleSearch}>
-        <Text style={{ fontSize: 24 }}>Pesquisar</Text>
-      </TouchableOpacity>
+      <SearchButton onPress={handleSearch}>
+        <SearchButtonText>Pesquisar</SearchButtonText>
+      </SearchButton>
 
       <Text>ou</Text>
 
       <TouchableOpacity
         style={{ padding: 20 }}
-        onPress={() => navigation.navigate("List")}
+        onPress={() => navigation.navigate('List')}
       >
         <Text>Ir para lista de livros</Text>
       </TouchableOpacity>
